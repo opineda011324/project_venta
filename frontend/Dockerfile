@@ -4,26 +4,26 @@ FROM node:21-alpine3.19 as build
 # Set the working directory
 WORKDIR /app
 
-# Copy the package.json and package-lock.json files
-COPY package*.json ./
-
-# Install dependencies
+COPY package.json .
+COPY package-lock.json .
 RUN npm ci
-
-# Copy the rest of the application code
 COPY . .
-
-# Build the React app
 RUN npm run build
 
-# Use a lightweight nginx image for the production stage
-FROM nginx:alpine
+FROM nginx:stable-alpine
+COPY --from=build /app/dist /usr/share/nginx/html
 
-# Copy the built React app from the previous stage
-COPY --from=build /app/build /usr/share/nginx/html
+# Expose the port that Nginx will listen on
+EXPOSE 80
 
-# Expose the port
-EXPOSE 3000
-
-# Start the nginx server
+# Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
+
+# Copy the rest of the application code
+# COPY . .
+
+# # Expose the port
+# EXPOSE 3000
+
+# # Start the nginx server
+# CMD ["npm", "run", "start"]

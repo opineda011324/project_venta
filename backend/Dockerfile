@@ -20,7 +20,7 @@ RUN npm run build
 FROM node:21-alpine3.19
 
 # Set the working directory
-WORKDIR /app
+WORKDIR /usr/src/app
 
 # Copy the built NestJS app from the previous stage
 COPY --from=build /app/dist ./dist
@@ -30,6 +30,9 @@ COPY package*.json ./
 
 # Install only production dependencies
 RUN npm install --only=production
+
+# Copy the .env file
+COPY .env ./
 
 # Expose the port
 EXPOSE 3001
