@@ -1,41 +1,23 @@
-# Use a Node.js base image
-FROM node:21-alpine3.19 as build
-
-# Set the working directory
-WORKDIR /app
-
-# Copy the package.json and package-lock.json files
-COPY package*.json ./
-
-# Install dependencies
-RUN npm install
-
-# Copy the rest of the application code
-COPY . .
-
-# Build the NestJS app
-RUN npm run build
-
-# Use a lightweight Node.js image for the production stage
+# Usar una imagen base de Node.js
 FROM node:21-alpine3.19
 
-# Set the working directory
-WORKDIR /usr/src/app
+# Establecer el directorio de trabajo
+WORKDIR /app
 
-# Copy the built NestJS app from the previous stage
-COPY --from=build /app/dist ./dist
-
-# Copy the package.json and package-lock.json files again
+# Copiar los archivos de configuración de npm
 COPY package*.json ./
 
-# Install only production dependencies
-RUN npm install --only=production
+# Instalar dependencias
+RUN npm install
 
-# Copy the .env file
-COPY .env ./
+# Copiar el resto del código fuente
+COPY . .
 
-# Expose the port
+# Instalar nodemon
+RUN npm install --save-dev nodemon
+
+# Exponer el puerto de desarrollo
 EXPOSE 3001
 
-# Start the NestJS server
-CMD ["npm", "run", "start:prod"]
+# Comando por defecto para iniciar la aplicación en modo desarrollo
+CMD ["npx", "nodemon", "-L", "--config", "nodemon.json"]
