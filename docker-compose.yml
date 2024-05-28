@@ -1,14 +1,18 @@
 version: '3.9'
 
 services:
-
-  # Servicio de la aplicación React
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - 8080:80
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    command: npm run dev
     depends_on:
       - backend
 

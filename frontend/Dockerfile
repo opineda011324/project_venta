@@ -1,29 +1,21 @@
-# Use a Node.js base image
-FROM node:21-alpine3.19 as build
+# Usa una imagen base de Node.js
+FROM node:21-alpine3.19
 
-# Set the working directory
+# Establece el directorio de trabajo
 WORKDIR /app
 
+# Copia los archivos de configuración de npm
 COPY package.json .
 COPY package-lock.json .
+
+# Instala las dependencias
 RUN npm ci
+
+# Copia el resto del código fuente
 COPY . .
-RUN npm run build
 
-FROM nginx:stable-alpine
-COPY --from=build /app/dist /usr/share/nginx/html
+# Expone el puerto de desarrollo
+EXPOSE 3000
 
-# Expose the port that Nginx will listen on
-EXPOSE 80
-
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
-
-# Copy the rest of the application code
-# COPY . .
-
-# # Expose the port
-# EXPOSE 3000
-
-# # Start the nginx server
-# CMD ["npm", "run", "start"]
+# Comando por defecto para iniciar la aplicación en modo desarrollo
+CMD ["npm", "start"]
