@@ -4,7 +4,7 @@ import './Nav.css';
 const Nav = () => {
   const [mostrarSubBotton, setmostrarSubButton] = useState(false);
 
-  const abriSubButton = () => {
+  const abrirSubButton = () => {
     setmostrarSubButton(!mostrarSubBotton);
   };
 
@@ -15,7 +15,7 @@ const Nav = () => {
   return (
     <nav className="nav">
       <div className="nav-item">
-        <button className="nav-button" onClick={abriSubButton}>Productos</button>
+        <button className="nav-button" onClick={abrirSubButton}>Productos</button>
         {mostrarSubBotton && (
           <div className="dropdown" onClick={cerrarSubButton}>
             <ul>
