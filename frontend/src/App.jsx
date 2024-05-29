@@ -1,14 +1,13 @@
-import { useState } from 'react'
-import './App.css'
+import React from 'react';
+import Nav from './Components/Nav/Nav';
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App = () => {
   return (
-    <>
-     <h1>hola mundo brr aaeee</h1>
-    </>
-  )
-}
+    <div className="App">
+      <Nav />
+    </div>
+  );
+};
 
-export default App
+
+export default App;
